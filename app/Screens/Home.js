@@ -30,7 +30,7 @@ export class Home extends Component {
         <Card item={_.sample(food.data)} navigation={navigation} />
         <View useNativeDriver animation='fadeInUpBig' easing='ease-out-expo'>
           <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 10, paddingTop: 15 }}>
-            <Text style={{ color: 'orange', fontSize: 20, fontWeight: '800' }}>Trending</Text>
+            <Text style={{ color: '#16a085', fontSize: 20, fontWeight: '800' }}>Trending</Text>
           </View>
           <FlatList
             data={_.sampleSize(food.data, 6)}
@@ -42,7 +42,7 @@ export class Home extends Component {
         </View>
         <View useNativeDriver animation='fadeInUpBig' easing='ease-out-expo'>
           <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 10, paddingTop: 15 }}>
-            <Text style={{ color: 'orange', fontSize: 20, fontWeight: '800' }}>Rekomendasi</Text>
+            <Text style={{ color: '#16a085', fontSize: 20, fontWeight: '800' }}>Rekomendasi</Text>
           </View>
           <FlatList
             data={_.sampleSize(food.data, 5)}
@@ -54,7 +54,7 @@ export class Home extends Component {
         </View>
         <View useNativeDriver animation='fadeInUpBig' easing='ease-out-expo'>
           <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 10, paddingTop: 15 }}>
-            <Text style={{ color: 'orange', fontSize: 20, fontWeight: '800' }}>Recent</Text>
+            <Text style={{ color: '#16a085', fontSize: 20, fontWeight: '800' }}>Recent</Text>
           </View>
           <FlatList
             numColumns={2}

@@ -31,9 +31,9 @@ const create = (baseURL = urlConfig[url]) => {
   })
 
   // if (config.DEBUG) {
-  const naviMonitor = (response) => console.log('API DEBUG! response =', response)
-  foodApi.addMonitor(naviMonitor)
-  api.addMonitor(naviMonitor)
+  // const naviMonitor = (response) => console.log('API DEBUG! response =', response)
+  // foodApi.addMonitor(naviMonitor)
+  // api.addMonitor(naviMonitor)
   // }
 
   // ------

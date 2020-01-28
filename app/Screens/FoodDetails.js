@@ -62,6 +62,8 @@ export class FoodDetails extends Component {
           </View>
           <View useNativeDriver animation='slideOutUp' easing='ease-out-expo' style={styles.boxBottom}>
             <Text style={globalStyles.title}>{data.strMeal}</Text>
+            <Text style={[globalStyles.fontMedium, { fontWeight: 'bold', paddingTop: 15, paddingBottom: 5 }]}>{'Instructions'}</Text>
+            <Text style={globalStyles.fontMedium}>{data.strInstructions}</Text>
             <View style={{ marginVertical: 20, width: width * 0.95, height: width * 0.55, alignSelf: 'center', borderRadius: 5, overflow: 'hidden' }}>
               <WebView source={{ uri: `https://www.youtube.com/embed/${data.strYoutube.split('watch?v=')[1]}` }} javaScriptEnabled domStorageEnabled mediaPlaybackRequiresUserAction />
             </View>
@@ -74,8 +76,7 @@ export class FoodDetails extends Component {
                 </View>
               ))}
             </View>
-            <Text style={[globalStyles.fontMedium, { fontWeight: 'bold', paddingTop: 15, paddingBottom: 5 }]}>{'Instructions'}</Text>
-            <Text style={globalStyles.fontMedium}>{data.strInstructions}</Text>
+
           </View>
         </ScrollView>
         }

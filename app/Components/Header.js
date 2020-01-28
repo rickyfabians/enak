@@ -11,8 +11,8 @@ const Header = props => {
     {/* <Text useNativeDriver animation='fadeIn' easing='ease-in-back' style={styles.dateText}>{moment().format('dddd, D MMM YYYY')}</Text> */}
     <TouchableOpacity onPress={() => props.navigation.navigate('Search')} >
       <View useNativeDriver animation='fadeIn' easing='ease-in-back' style={styles.searchBox}>
-        <Icon name={'search'} size={14} color={'orange'} style={{ paddingRight: 70 }} />
-        <Text style={{ color: 'orange' }}>Search for an Seafood...</Text>
+        <Icon name={'search'} size={14} color={'#16a085'} style={{ paddingRight: 70 }} />
+        <Text style={{ color: '#16a085' }}>Search for an Seafood...</Text>
       </View>
     </TouchableOpacity>
   </View>

@@ -4,7 +4,7 @@ import { FlatList, TextInput, TouchableWithoutFeedback } from 'react-native'
 import _ from 'lodash'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 // Redux
 import FoodListActions from '../Redux/FoodListRedux'
@@ -35,16 +35,16 @@ export class Search extends Component {
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 5, paddingBottom: 10 }}>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
             <View useNativeDriver animation='slideInLeft' easing='ease-in-out-quad'>
-              <Icon name={'arrow-left'} size={30} color={'orange'} />
+              <Icon name={'keyboard-arrow-down'} size={35} color={'#16a085'} />
             </View>
           </TouchableWithoutFeedback>
-          <View useNativeDriver animation='slideInLeft' easing='ease-out-expo' style={{ flex: 1, borderWidth: 1, borderColor: 'orange', borderRadius: 20, paddingHorizontal: 8 }} >
+          <View useNativeDriver animation='slideInLeft' easing='ease-out-expo' style={{ flex: 1, borderWidth: 1, borderColor: '#16a085', borderRadius: 20, paddingHorizontal: 8 }} >
             <TextInput
               style={{ height: 40, fontWeight: 'bold' }}
               onChangeText={v => this.setState({ keyword: v })}
               autoFocus
               placeholder={'Seafood..'}
-              placeholderTextColor={'orange'}
+              placeholderTextColor={'#16a085'}
               value={keyword}
               onSubmitEditing={() => foodListRequest(keyword)}
             />
