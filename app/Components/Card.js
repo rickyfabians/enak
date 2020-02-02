@@ -9,7 +9,10 @@ import globalStyles from '../Styles/GlobalStyle'
 
 const Card = props => {
   const { item, navigation } = props
-  return <TouchableWithoutFeedback onPress={() => navigation.navigate('FoodDetails', { item })} >
+  return <TouchableWithoutFeedback onPress={() => {
+    console.log('navigation shdjfahsvd', item)
+    navigation.navigate('FoodDetails', { item })
+  }} >
     <View useNativeDriver animation='fadeInUpBig' easing='ease-out-expo' style={styles.container}>
       <ImageBackground source={{ uri: item.strMealThumb }}
         imageStyle={{ borderRadius: 10 }}

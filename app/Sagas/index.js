@@ -6,10 +6,12 @@ import API from '../Services/Api'
 
 import { FoodListTypes } from '../Redux/FoodListRedux'
 import { FoodDetailsTypes } from '../Redux/FoodDetailsRedux'
+import { BookmarkTypes } from '../Redux/BookmarkRedux'
 
 /* ------------- Sagas ------------- */
 import { getFoodList } from './FoodListSagas'
 import { getFoodDetails } from './FoodDetailsSagas'
+import { setBookmark } from './BookmarkSagas'
 
 /* ------------- API ------------- */
 
@@ -23,6 +25,7 @@ export default function * root () {
   yield all([
     // some sagas only receive an action
     takeLatest(FoodListTypes.FOOD_LIST_REQUEST, getFoodList, api),
-    takeLatest(FoodDetailsTypes.FOOD_DETAILS_REQUEST, getFoodDetails, api)
+    takeLatest(FoodDetailsTypes.FOOD_DETAILS_REQUEST, getFoodDetails, api),
+    takeLatest(BookmarkTypes.BOOKMARK_REQUEST, setBookmark)
   ])
 }

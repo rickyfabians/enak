@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import { Text, ScrollView, StatusBar, Dimensions } from 'react-native'
+import { Text, ScrollView, Dimensions, TouchableOpacity, ActivityIndicator, TouchableWithoutFeedback } from 'react-native'
 import { View, Image } from 'react-native-animatable'
 import { WebView } from 'react-native-webview'
 import { connect } from 'react-redux'
-// import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import _ from 'lodash'
 
 import styles from './Styles/FoodDetailsStyles'
 import globalStyles from '../Styles/GlobalStyle'
 
 // Redux
-import FoodDetailsActions from '../Redux/FoodDetailsRedux'
+import BookmarkActions from '../Redux/BookmarkRedux'
 
 const { height, width } = Dimensions.get('screen')
 export class FoodDetails extends Component {
@@ -20,13 +20,18 @@ export class FoodDetails extends Component {
       data: props.navigation.getParam('item', null),
       size: 0,
       ingredient: [],
-      measure: []
+      measure: [],
+      fetchingBookmark: true
     }
   }
 
   componentDidMount () {
+    const { bookmark } = this.props
     const { data } = this.state
-    this.props.foodDetailsRequest(this.state.data.idMeal)
+    let bookmarkText = 'Add to bookmark'
+    if (_.includes(bookmark.data, data)) {
+      bookmarkText = ''
+    }
     const ingredient = _.reduce(data, (result, value, key) => {
       if (key.includes('strIngredient') && value) result.push(value)
       return result
@@ -35,7 +40,16 @@ export class FoodDetails extends Component {
       if (key.includes('strMeasure') && value) result.push(value)
       return result
     }, [])
-    this.setState({ ingredient, measure })
+    this.setState({ ingredient, measure, bookmarkText, fetchingBookmark: false })
+  }
+
+  componentDidUpdate (prevProps) {
+    const { bookmark } = this.props
+    if (this.state.fetchingBookmark && prevProps.bookmark.data !== bookmark.data) {
+      setTimeout(() => {
+        this.setState({ fetchingBookmark: false })
+      }, 2000)
+    }
   }
 
   handleScroll (event) {
@@ -44,11 +58,10 @@ export class FoodDetails extends Component {
   }
 
   render () {
-    const { data, size, ingredient, measure } = this.state
-    // const { foodDetails } = this.props
+    const { data, size, ingredient, measure, fetchingBookmark, bookmarkText } = this.state
+    const { bookmarkRequest } = this.props
     return (
       <View>
-        <StatusBar translucent backgroundColor='transparent' barStyle='dark-content' />
         {/* <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
             <View useNativeDriver animation='slideInLeft' easing='ease-in-out-quad' style={{position:'absolute', paddingTop: 25, paddingLeft:5, zIndex:1}}>
               <Icon name={'arrow-left'} size={35} />
@@ -61,7 +74,12 @@ export class FoodDetails extends Component {
             <Image useNativeDriver animation='zoomIn' easing='ease-out-expo' source={{ uri: data.strMealThumb }} style={{ width: width + size, height: height * (0.65 + size) }} />
           </View>
           <View useNativeDriver animation='slideOutUp' easing='ease-out-expo' style={styles.boxBottom}>
-            <Text style={globalStyles.title}>{data.strMeal}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={[globalStyles.title, { flex: 1 }]}>{data.strMeal}</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()} >
+                <Icon name={'keyboard-arrow-down'} size={35} color={'#16a085'} />
+              </TouchableOpacity>
+            </View>
             <Text style={[globalStyles.fontMedium, { fontWeight: 'bold', paddingTop: 15, paddingBottom: 5 }]}>{'Instructions'}</Text>
             <Text style={globalStyles.fontMedium}>{data.strInstructions}</Text>
             <View style={{ marginVertical: 20, width: width * 0.95, height: width * 0.55, alignSelf: 'center', borderRadius: 5, overflow: 'hidden' }}>
@@ -70,9 +88,9 @@ export class FoodDetails extends Component {
             <View>
               <Text style={[globalStyles.fontMedium, { fontWeight: 'bold', paddingTop: 10, paddingBottom: 2 }]}>{'Ingradient'}</Text>
               {_.map(ingredient, (value, index) => (
-                <View style={{ justifyContent: 'space-between', flexDirection: 'row', borderBottomWidth: 1, paddingTop: 6 }}>
-                  <Text key={index} style={globalStyles.fontMedium}>{value}</Text>
-                  <Text key={index} style={globalStyles.fontMedium}>{measure[index] || ''}</Text>
+                <View key={`new ${index}`} style={{ justifyContent: 'space-between', flexDirection: 'row', borderBottomWidth: 1, paddingTop: 6 }}>
+                  <Text style={globalStyles.fontMedium}>{value}</Text>
+                  <Text style={[globalStyles.fontMedium, { fontWeight: 'bold' }]}>{measure[index] || ''}</Text>
                 </View>
               ))}
             </View>
@@ -80,17 +98,33 @@ export class FoodDetails extends Component {
           </View>
         </ScrollView>
         }
+        {fetchingBookmark &&
+          <View useNativeDriver animation='flipInY' easing='ease-out-expo'style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 30, backgroundColor: '#16a085', position: 'absolute', bottom: 10, alignSelf: 'center' }}>
+            <ActivityIndicator color='white' />
+          </View>
+        }
+        {!_.isEmpty(bookmarkText) &&
+          <TouchableWithoutFeedback onPress={() => {
+            this.view.flipOutY(1000)
+            this.setState({ fetchingBookmark: true }, () => bookmarkRequest(data))
+          }
+          }>
+            <View ref={ref => (this.view = ref)} style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 30, backgroundColor: '#16a085', position: 'absolute', bottom: 10, alignSelf: 'center' }}>
+              <Text style={{ color: 'white' }}>{bookmarkText}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        }
       </View>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  foodDetails: state.foodDetails
+  bookmark: state.bookmark
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  foodDetailsRequest: (search) => dispatch(FoodDetailsActions.foodDetailsRequest(search))
+  bookmarkRequest: (data) => dispatch(BookmarkActions.bookmarkRequest(data))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FoodDetails)

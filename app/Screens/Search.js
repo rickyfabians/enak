@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native-animatable'
-import { FlatList, TextInput, TouchableWithoutFeedback } from 'react-native'
+import { FlatList, TextInput, TouchableOpacity } from 'react-native'
 import _ from 'lodash'
 import LottieView from 'lottie-react-native'
 import { connect } from 'react-redux'
@@ -31,13 +31,13 @@ export class Search extends Component {
     const { foodListRequest, food, navigation } = this.props
     const { keyword } = this.state
     return (
-      <View style={{ paddingTop: 20, flex: 1, backgroundColor: 'white' }}>
+      <View style={{ paddingTop: 40, flex: 1, backgroundColor: 'white' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 5, paddingBottom: 10 }}>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
+          <TouchableOpacity onPress={() => navigation.goBack()} >
             <View useNativeDriver animation='slideInLeft' easing='ease-in-out-quad'>
               <Icon name={'keyboard-arrow-down'} size={35} color={'#16a085'} />
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
           <View useNativeDriver animation='slideInLeft' easing='ease-out-expo' style={{ flex: 1, borderWidth: 1, borderColor: '#16a085', borderRadius: 20, paddingHorizontal: 8 }} >
             <TextInput
               style={{ height: 40, fontWeight: 'bold' }}

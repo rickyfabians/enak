@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, ScrollView, RefreshControl } from 'react-native'
+import { FlatList, ScrollView, RefreshControl, StatusBar } from 'react-native'
 import { View, Text } from 'react-native-animatable'
 import { connect } from 'react-redux'
 import LottieView from 'lottie-react-native'
@@ -71,7 +71,8 @@ export class Home extends Component {
   render () {
     const { navigation, food } = this.props
     return (
-      <View style={{ paddingTop: 20, flex: 1, backgroundColor: 'white' }}>
+      <View style={{ paddingTop: 40, flex: 1, backgroundColor: 'white' }}>
+        <StatusBar translucent backgroundColor='transparent' barStyle='dark-content' />
         <Header navigation={navigation} />
         {food.fetching
           ? <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
