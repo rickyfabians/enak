@@ -5,6 +5,19 @@ import ScreenTracking from './ScreenTrackingMiddleware'
 // import logger from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { appNavigatorMiddleware } from '../Navigation/ReduxNavigation'
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+const persistConfig = {
+  key: 'root',
+  storage: storage,
+  /**
+   * Blacklist state that we do not need/want to persist
+   */
+  blacklist: [
+    // 'auth',
+  ],
+}
 
 // creates the store
 export default (rootReducer, rootSaga) => {
@@ -20,9 +33,7 @@ export default (rootReducer, rootSaga) => {
 
   /* ------------- Saga Middleware ------------- */
 
-  const sagaMonitor = Config.pdebug
-    ? null : null
-  const sagaMiddleware = createSagaMiddleware({ sagaMonitor })
+  const sagaMiddleware = createSagaMiddleware()
   middleware.push(sagaMiddleware)
 
   /* ------------- Logger Middleware ------------- */
@@ -32,11 +43,12 @@ export default (rootReducer, rootSaga) => {
 
   /* ------------- Assemble Middleware ------------- */
 
-  const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middleware)))
-
+  const persistedReducer = persistReducer(persistConfig, rootReducer)
+  const store = __DEV__ 
+    ? createStore(persistedReducer, composeWithDevTools(applyMiddleware(...middleware)))
+    : createStore(persistedReducer, applyMiddleware(...middleware))
   // kick off root saga
   let sagasManager = sagaMiddleware.run(rootSaga)
-
   return {
     store,
     sagasManager,

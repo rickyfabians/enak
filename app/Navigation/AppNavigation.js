@@ -1,32 +1,14 @@
 import React from 'react'
-import { createStackNavigator } from 'react-navigation-stack'
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack'
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs'
 import { createAppContainer } from 'react-navigation'
 import { Text, Animated } from 'react-native'
-import TabBar from './TabBar'
+// import TabBar from './TabBar'
 import Home from '../Screens/Home'
 import Bookmark from '../Screens/Bookmark'
 import Search from '../Screens/Search'
 import FoodDetails from '../Screens/FoodDetails'
 // import Icon from 'react-native-vector-icons/FontAwesome'
-// import { fromLeft, zoomIn, zoomOut } from 'react-navigation-transitions'
-
-// const handleCustomTransition = ({ scenes }) => {
-//   const prevScene = scenes[scenes.length - 2]
-//   const nextScene = scenes[scenes.length - 1]
-
-//   // Custom transitions go there
-//   if (prevScene &&
-//     prevScene.route.routeName === 'ScreenA' &&
-//     nextScene.route.routeName === 'ScreenB') {
-//     return zoomIn()
-//   } else if (prevScene &&
-//     prevScene.route.routeName === 'ScreenB' &&
-//     nextScene.route.routeName === 'ScreenC') {
-//     return zoomOut()
-//   }
-//   return fromLeft()
-// }
 
 const AppNavigator = createMaterialTopTabNavigator(
   {
@@ -63,6 +45,12 @@ const AppNavigator = createMaterialTopTabNavigator(
     // transitionConfig: () => zoomIn(),
     // tabBarComponent: TabBar,
     initialRouteName: 'Home',
+    onTransitionStart: () => ({
+      transitionSpec: {
+        duration: 0,
+        timing: Animated.timing
+      }
+    }),
     tabBarOptions: {
       showIcon: true,
       showLabel: false,
@@ -97,18 +85,18 @@ const AppNavigator = createMaterialTopTabNavigator(
 const PrimaryNav = createStackNavigator({
   Home: { screen: AppNavigator },
   FoodDetails: { screen: FoodDetails },
-  Search: { screen: Search }
+  Search: {
+    screen: Search,
+    navigationOptions: {
+      gestureEnabled: true,
+      cardOverlayEnabled: true,
+      ...TransitionPresets.ModalSlideFromBottomIOS
+    }
+  }
 }, {
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'Home',
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration: 0,
-      timing: Animated.timing,
-      opacity: 0
-    }
-  })
+  initialRouteName: 'Home'
 })
 
 export default createAppContainer(PrimaryNav)
